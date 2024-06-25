@@ -10,10 +10,12 @@ function App() {
   const styleRef = useRef(null);
 
   const passwordGenerator = useCallback(() => {
-    let str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     let pass = "";
-    if (number) str += "0123456789";
-    if (character) str += '!@#$%^&*()_+{}[]|:;"<>,.?/~';
+    let str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    let num = "0123456789";
+    let char = '!@#$%^&*()_+{}[]|:;"<>,.?/~';
+    if (number) str += num;
+    if (character) str += char;
     for (let i = 0; i < length; i++) {
       let index = Math.floor(Math.random() * str.length);
       pass += str.charAt(index);
@@ -28,8 +30,13 @@ function App() {
   const copyPassword = useCallback(() => {
     styleRef.current.style.backgroundColor = "green";
     styleRef.current.innerText = "Copied";
-    passwordRef.current?.select();
     window.navigator.clipboard.writeText(password);
+    passwordRef.current?.select();
+    // passwordRef.current.setSelectionRange(0,password.length)
+    setTimeout(() => {
+      styleRef.current.style.backgroundColor = "";
+      styleRef.current.innerText = "Copy";
+    }, 2000);
   }, [password]);
 
   return (
@@ -55,7 +62,7 @@ function App() {
             max={100}
             min={0}
             value={length}
-            onChange={(e) => setLength(parseInt(e.target.value, 10))}
+            onChange={(e) => setLength(parseInt(e.target.value))}
           />
           <label className="label">Length: {length}</label>
 
